@@ -1,4 +1,4 @@
-import React , {useEffect,Component} from 'react';
+import React , {useEffect} from 'react';
  import PropTypes from 'prop-types';
 import { Overlay, ModalDiv} from './Modal.styled';
 //import { ProgressBar } from 'react-loader-spinner';
