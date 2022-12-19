@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal/Modal';
 import { AppDiv } from './App.styled';
 
 
-export const App =()=>{console.log("in App")
+export const App =()=>{
   const [page, setPage] = useState(1);
   const [searchWord, setSearchWord] = useState("");
   const [showModal, setShowModal] = useState(false);
