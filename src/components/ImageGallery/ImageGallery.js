@@ -25,7 +25,8 @@ export const ImgGallery =({searchWord,loadMore,page,onImgClick,shereSrcForModal}
   const BASEURL = 'https://pixabay.com/api/';
 const KEY = '30040272-179178153c29e3da83ceec1ea';
 useEffect(() => {
-  setStatus(Status.PENDING )
+  
+  if (searchWord){setStatus(Status.PENDING )
   FetchFotos(BASEURL,KEY,searchWord,page)
   .then(photos=>{
     if(photos.hits.length===0){toast.error('We did not find anything. Try again with a new word!');}
@@ -47,6 +48,8 @@ useEffect(() => {
  })//end catch
  if(page !== 1){
     autoscroll()}
+  }
+  
 
   //-
 }, [page, searchWord]);
