@@ -18,7 +18,7 @@ export const App =()=>{
 const  toggleModal=()=>{setShowModal(showModal => !showModal)}
  
  const handleFormSubmit = searchWord => {
-    setSearchWord( searchWord)
+    setSearchWord(searchWord)
     setPage(1) };
 
    const shereSrcForModal=(srcLarge,altLarge)=>{ 

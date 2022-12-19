@@ -1,4 +1,4 @@
-import React , { Component }from 'react';
+import React , {  useState, useEffect}from 'react';
 import toast from 'react-hot-toast'
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
@@ -16,79 +16,47 @@ const Status = {
   RESOLVED: 'resolved',
   REJECTED: 'rejected',
 };
-
-export class ImgGallery extends Component{
-  state={
-    photos:[],
-    status: Status.IDLE,
-    error: null,
-  totalHits:0,
-  perPage:12}
- 
-  BASEURL = 'https://pixabay.com/api/';
-KEY = '30040272-179178153c29e3da83ceec1ea';
-
-componentDidUpdate(prevProps, prevState) {
-  
-  const prevWord = prevProps.searchWord;
-  const nextWord = this.props.searchWord;
- const {page}=this.props;
-
-  if ( prevWord !== nextWord || prevProps.page !==this.props.page) {
-   
-
-    this.setState({ status: Status.PENDING })
-
-
-    FetchFotos(this.BASEURL,this.KEY,nextWord,page)
-   .then(photos=>{
+export const ImgGallery =({searchWord,loadMore,page,onImgClick,shereSrcForModal})=>{
+  const  perPage =  12
+  const [ photos, setPhotos] = useState([]); 
+  const [ status, setStatus] = useState("Status.IDLE"); 
+ // const [ error, setError] = useState(null); 
+  const [  totalHits, setTotalHits] = useState(0); 
+  const BASEURL = 'https://pixabay.com/api/';
+const KEY = '30040272-179178153c29e3da83ceec1ea';
+useEffect(() => {
+  setStatus(Status.PENDING )
+  FetchFotos(BASEURL,KEY,searchWord,page)
+  .then(photos=>{
     if(photos.hits.length===0){toast.error('We did not find anything. Try again with a new word!');}
-    if(this.props.page === 1){ 
-     
-      this.setState({ photos: photos.hits,
-      status: Status.RESOLVED,
-      totalHits: photos.totalHits })
-      
-     }
+    if(page === 1){ 
+     setPhotos(photos.hits)
+     setStatus(Status.RESOLVED)
+     setTotalHits(photos.totalHits )
+      }
     else{ 
-      this.setState({
-      photos:[...prevState.photos,...photos.hits],  
-      status: Status.RESOLVED,
-    totalHits: photos.totalHits})
-   
-  }
-    
-   }
-    
-    
-    )
+        setPhotos(prev=>[...prev,...photos.hits])
+     setStatus(Status.RESOLVED)
+     setTotalHits(photos.totalHits )
+  }    
+   })//end then
    .catch( () => 
-    {this.setState({  status: Status.REJECTED })
-    toast.error("Ups... Something is wrong. Try again!",{duration: 4000,
-      position: 'top-center'}, ) }
-    )
+   {setStatus(Status.REJECTED )
+       toast.error("Ups... Something is wrong. Try again!",{duration: 4000,
+     position: 'top-center'}, ) 
+ })//end catch
+ if(page !== 1){
+    autoscroll()}
 
-}
+  //-
+}, [page, searchWord]);
 
-if(this.props.page !== 1){;
-  autoscroll()}
-  
-}
-
-
-onLoadMoreClick = () => {
-  this.props.loadMore();
+const onLoadMoreClick = () => {
+  loadMore();
 };
- 
-render(){  
-  const {photos, status,totalHits,perPage}=this.state;
-  const totalPage = Math.ceil(totalHits / perPage);
-  
-const { onImgClick, shereSrcForModal} = this.props;
+const totalPage = Math.ceil(totalHits / perPage);
 if(status==="pending"){return <Loader/>}
-
-
-if (status === 'resolved') {
+ if (status === 'resolved') {
   return  (<>
     {photos &&
     (<div className="gallery">
@@ -100,17 +68,17 @@ if (status === 'resolved') {
     ))}
     </ImageGallery></div>)}
     
-    {photos.length>0  && this.props.page<totalPage ? (<LoadMoreBtn  onLoadMoreClick={this.onLoadMoreClick} >Load More</LoadMoreBtn>):null}
+    {photos.length>0  && page<totalPage ? (<LoadMoreBtn  onLoadMoreClick={onLoadMoreClick} >Load More</LoadMoreBtn>):null}
     
     </>
   );
-}}
-
+}
+// }
 }
 ImgGallery.propTypes={    
-  searchWord:PropTypes.string.isRequired,
-  loadMore:PropTypes.func,
-  page:PropTypes.number.isRequired,
-  onImgClick:PropTypes.func,
-  shereSrcForModal:PropTypes.func,
-}
+    searchWord:PropTypes.string.isRequired,
+    loadMore:PropTypes.func,
+    page:PropTypes.number.isRequired,
+    onImgClick:PropTypes.func,
+    shereSrcForModal:PropTypes.func,
+  }
