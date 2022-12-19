@@ -6,14 +6,13 @@ import { ImgGallery } from 'components/ImageGallery/ImageGallery';
 import { Modal } from 'components/Modal/Modal';
 import { AppDiv } from './App.styled';
 
-// import { fetchPhotos } from 'components/FetchApi';
 
 export const App =()=>{
   const [page, setPage] = useState(1);
   const [searchWord, setSearchWord] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [largeImgData, setLargeImgData] = useState({});//!!!!largeImgData: { src: '', alt: '' },
- // const [status, setStatus] = useState("");
+  const [largeImgData, setLargeImgData] = useState({ });
+
 
 const  toggleModal=()=>{setShowModal(showModal => !showModal)}
  

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import { LoadMoreBtn } from 'components/Button/Button';
 import { ImgGalleryItem } from 'components/GalleryItem/GalleryItem'; 
-//import { ErrorView } from 'components/ErrorView/ErrorView';
+
 import { Loader } from 'components/Loader/Loader';
 import { FetchFotos } from 'components/FetchFotos/FetchFotos';
 import { ImageGallery } from './ImageGallery.styled';
@@ -46,13 +46,16 @@ useEffect(() => {
        toast.error("Ups... Something is wrong. Try again!",{duration: 4000,
      position: 'top-center'}, ) 
  })//end catch
- if(page !== 1){
-    autoscroll()}
+
   }
   
 
   //-
 }, [page, searchWord]);
+
+useEffect(() => {if(page !== 1){autoscroll();}
+    
+  }, [page, photos]);
 
 const onLoadMoreClick = () => {
   loadMore();

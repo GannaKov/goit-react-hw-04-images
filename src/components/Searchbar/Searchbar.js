@@ -13,7 +13,7 @@ export const Searchbar =({onSubm})=>{
   const handleSubmit = evt => {
     evt.preventDefault();
     if (searchWord.trim() === '') {
-      toast.error('Input smh');
+      toast.error('Please fill the search form ');
       return;
     }
     
